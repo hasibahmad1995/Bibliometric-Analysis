@@ -23,15 +23,14 @@ def nor(original_data,min_value, max_value):
     new_min = 5
     new_max = 50
     if max_value != min_value:
-        normalized_value = (original_data - min_value) / (max_value - min_value)  # 归一化到 [0, 1]
-        transformed_value = (normalized_value * (new_max - new_min)) + new_min  # 转换到 [new_min, new_max]
+        normalized_value = (original_data - min_value) / (max_value - min_value)  
+        transformed_value = (normalized_value * (new_max - new_min)) + new_min  
         return transformed_value
 
 def create_keyword_network(keywords_set, keyword_info_map, coOccurrence_matrix):
     nodes = []
     edges = []
 
-    # 创建进度条
     progress_bar = tqdm(total=len(keywords_set) * (len(keywords_set) - 1) // 2, desc="Creating Network")
 
     for idx, keyword_hash in enumerate(keywords_set):
@@ -49,11 +48,11 @@ def create_keyword_network(keywords_set, keyword_info_map, coOccurrence_matrix):
             "name": keyword_name,
             "symbolSize": normalized_count,
             "itemStyle": {
-                "color": "rgba(142, 192, 173, 0.9)"  # 节点的颜色，透明度为0.9
+                "color": "rgba(142, 192, 173, 0.9)" 
             },
             "label": opts.LabelOpts(
-                position="top",  # 标签位置
-                font_size=10  # 标签字体大小
+                position="top", 
+                font_size=10 
             ),
         }
         nodes.append(node)
@@ -70,10 +69,8 @@ def create_keyword_network(keywords_set, keyword_info_map, coOccurrence_matrix):
                     "value": co_occurrence_count,
                 }
                 edges.append(edge)
-            # 更新进度条
             progress_bar.update(1)
 
-    # 关闭进度条
     progress_bar.close()
 
     return nodes, edges
