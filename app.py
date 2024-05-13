@@ -10,7 +10,6 @@ from utils.visualization.network_visu import network_visu
 
 app = Flask(__name__)
 
-# 创建全局变量来存储数据
 literature_data = None
 author_data = None
 author_publication_data = None
@@ -29,12 +28,9 @@ co_occurrence_matrix = None
 
 def delete_files_in_folder(folder_path):
     try:
-        # 遍历指定文件夹中的所有文件
         for filename in os.listdir(folder_path):
             file_path = os.path.join(folder_path, filename)
-            # 检查是否是文件
             if os.path.isfile(file_path):
-                # 删除文件
                 os.remove(file_path)
                 print(f"Deleted: {file_path}")
         print("All files in the folder have been deleted.")
@@ -70,16 +66,15 @@ def network():
 def load_data():
     global literature_data, author_data, author_publication_data
 
-    # 读取 literature_data.csv
+    # literature_data.csv
     literature_data = pd.read_csv('database/literature_data.csv', encoding='utf-8')
 
-    # 读取 author_data.csv
+    # author_data.csv
     author_data = pd.read_csv('database/author_data.csv', encoding='utf-8')
 
-    # 读取 author_publication_csv.csv
+    # author_publication_csv.csv
     author_publication_data = pd.read_csv('database/author_publication_data.csv', encoding='utf-8')
     ic(literature_data, author_data, author_publication_data)
-# 在应用启动时调用加载数据的函数
 load_data()
 
 
@@ -98,7 +93,6 @@ def search():
         delete_files_in_folder('database/keyword')
         delete_files_in_folder('database/paper')
         image_files = []
-        # 执行文献搜索
         literature_results, author_results, publication_results = search_literature(user_input)
 
         search_results = {
@@ -143,15 +137,12 @@ def search_literature(user_input):
     global literature_data, author_data, author_publication_data,filtered_literature, author_results, publication_results
     ic(literature_data)
     ic(user_input)
-    # 执行文献搜索
     # filtered_literature = literature_data[literature_data['Title'].str.contains(user_input)]
     filtered_literature = literature_data[literature_data['Title'].str.contains(user_input, regex=False)]
 
-    # 筛选出对应的出版物数据
     publication_ids = filtered_literature['EID'].unique()
     publication_results = author_publication_data[author_publication_data['PublicationEID'].isin(publication_ids)]
 
-    # 筛选出对应的作者数据
     author_ids = publication_results['Author(s) ID'].unique()
     author_results = author_data[author_data['Author(s) ID'].isin(author_ids)]
 
@@ -159,8 +150,6 @@ def search_literature(user_input):
     return filtered_literature, author_results, publication_results
 
 from flask import send_from_directory, render_template
-
-# 为生成的图表保存的目录
 IMAGE_PATH = 'static/images/vision/'
 
 @app.route('/visualize', methods=['GET'])
@@ -168,10 +157,7 @@ def visualize():
     global image_files
     ic(image_files)
     if image_files == []:
-        # 如果图表尚未生成完毕，显示一个提示信息
         generate_visualizations()
-
-    # 图表生成完毕，显示六个可视化图表
     return render_template('visualize.html', image_files=image_files)
 
 def generate_visualizations():
@@ -179,7 +165,6 @@ def generate_visualizations():
     global filtered_literature, author_results, publication_results, image_files
 
     eda(author_results, filtered_literature, publication_results)
-    # 添加图表文件名到 image_files 中
 
     image_files.append('author_aff.jpg')
     image_files.append('author_productivity.jpg')
@@ -187,7 +172,6 @@ def generate_visualizations():
     image_files.append('influence_factor_rank.jpg')
     image_files.append('source_title_analysis.jpg')
     image_files.append('yearly_publication_trends.jpg')
-    # 添加其他图表文件名到 image_files 中
 
     # return image_files
 
