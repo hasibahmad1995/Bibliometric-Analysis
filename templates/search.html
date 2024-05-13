@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sourch</title>
+    <link rel="stylesheet" href="static/css/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <style>
+        .fixed-height-container {
+            height: 500px; /* 设置容器的固定高度 */
+            overflow: auto; /* 启用滚动条 */
+            border: 1px solid #ccc; /* 可选：添加边框 */
+            padding: 10px; /* 可选：添加内边距 */
+        }
+
+       .sidebar {
+           height: 100vh;  /* Set the height of the sidebar to 100% of the viewport height */
+           overflow-y: auto;  /* Add a scrollbar if the content exceeds the height */
+           box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1);
+       }
+       .nav-link{
+           color: #000033;
+           padding: 20px 20px 20px 20px;
+       }
+       th:hover {
+            cursor: pointer;
+       }
+       th.clickable {
+            text-decoration: underline;
+       }
+
+
+        .sort-icon {
+            font-size: 12px;
+            margin-left: 5px;
+            color: #000; /* 初始颜色 */
+        }
+
+        .sort-icon::after {
+            content: "▲";
+        }
+
+        .sort-icon.sorted-asc::after {
+            content: "▲"; /* 升序排序图标 */
+            color: #000;
+        }
+
+        .sort-icon.sorted-desc::after {
+            content: "▼"; /* 降序排序图标 */
+            color: #000;
+        }
+
+
+    </style>
+
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-3 d-md-block bg-light sidebar">
+            <div class="position-sticky">
+                <ul class="nav flex-column">
+                    <li>
+                        <a class="button" tyle="padding-top: 40px" href="/index.html">
+                            <h4>DS Paper Universe</h4>
+                            <hr>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="paper-link">
+                            <img src="/static/image/list.svg" width="40">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Papers
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="visualize">
+                            <i class="bi bi-cart"></i>
+                            <img src="/static/image/visualization.svg" width="40">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Visualize
+                        </a>
+                    </li>
+                     <li class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="collapse" data-target="#networkSubmenu">
+                            <i class="bi bi-box"></i>
+                            <img src="/static/image/loading.svg" width="40">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Network
+                        </a>
+                        <ul class="collapse" id="networkSubmenu">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-page="keywordsNetwork.html">
+                                    <img src="/static/image/search-1.svg" width="40">
+                                    Keywords Network
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-page="paperNetwork.html">
+                                    <img src="/static/image/files-1.svg" width="40">
+                                    Paper Network
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="direction.html">
+                            <i class="bi bi-person"></i>
+                            <img src="/static/image/chat-1.svg" width="40">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Research direction
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- End of Sidebar -->
+
+        <!-- Content -->
+        <main class="col-md-9 ms-sm-auto col-lg-9 px-md-4" style="padding-top: 40px ;">
+            <!-- 在search.html中添加以下代码来显示搜索结果 -->
+            <!-- 在search.html中添加Bootstrap 5表格来显示搜索结果 -->
+            <div class="content-container rounded p-4 shadow fixed-height-container" style="background-color: rgba(255, 255, 255, 0.8)">
+                <h2>Your keywords: {{ user_input }}</h2>
+                <h3>Search Results:</h3>
+                <div class="table-responsive" id="search-results-container">
+                    <table class="table table-bordered table-striped" id="search-results-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 60%;" class="clickable" onclick="sortTable(0)" title="Click to sort">Title
+                                    <span class="sort-icon" id="title-sort-icon"></span>
+                                </th>
+                                <th style="width: 20%;" class="clickable" onclick="sortTable(1)" title="Click to sort">Year
+                                    <span class="sort-icon" id="year-sort-icon"></span>
+                                </th>
+                                <th style="width: 20%;" class="clickable" onclick="sortTable(2)" title="Click to sort">Source Title
+                                    <span class="sort-icon" id="source-sort-icon"></span>
+                                </th>
+                                <!-- 添加其他需要显示的表头 -->
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for index, literature in literature_results.iterrows() %}
+                                <tr>
+                                    <td>{{ literature['Title'] }}</td>
+                                    <td>{{ literature['Year'] }}</td>
+                                    <td>{{ literature['Source title'] }}</td>
+                                    <!-- 添加其他需要显示的列 -->
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const paperLink = document.getElementById("paper-link");
+        paperLink.addEventListener("click", function (event) {
+            event.preventDefault();
+            loadPaperPage();
+        });
+
+        function loadPaperPage() {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "/Papers.html", true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const contentContainer = document.querySelector(".content-container");
+                    contentContainer.innerHTML = xhr.responseText;
+                }
+            };
+            xhr.send();
+        }
+    });
+
+
+    var titleSortIcon = document.getElementById("title-sort-icon");
+        var yearSortIcon = document.getElementById("year-sort-icon");
+        var sourceSortIcon = document.getElementById("source-sort-icon");
+
+        var sortState = {
+            0: 1, // 0表示升序，1表示降序
+            1: 1,
+            2: 1
+        };
+
+        function updateSortIcon(columnIndex) {
+            var sortIcon = document.getElementById(columnIndex === 0 ? "title-sort-icon" : columnIndex === 1 ? "year-sort-icon" : "source-sort-icon");
+            if (sortState[columnIndex] === 0) {
+                sortIcon.classList.remove("sorted-asc");
+                sortIcon.classList.add("sorted-desc");
+            } else {
+                sortIcon.classList.remove("sorted-desc");
+                sortIcon.classList.add("sorted-asc");
+            }
+        }
+
+        function sortTable(columnIndex) {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("search-results-table");
+            switching = true;
+            sortState[columnIndex] = 1 - sortState[columnIndex]; // 切换排序状态
+            updateSortIcon(columnIndex);
+
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[columnIndex];
+                    y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+
+                    if (sortState[columnIndex] === 0) {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const sidebarLinks = document.querySelectorAll(".nav-link");
+        const contentContainer = document.querySelector(".content-container");
+
+        sidebarLinks.forEach(function (link) {
+            link.addEventListener("click", function (event) {
+                event.preventDefault();
+                const pageToLoad = this.getAttribute("data-page");
+                loadPage(pageToLoad);
+            });
+        });
+
+        function loadPage(pageName) {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", pageName, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    contentContainer.innerHTML = xhr.responseText;
+                }
+            };
+            xhr.send();
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const sidebarLinks = document.querySelectorAll(".nav-link");
+        const networkLink = document.querySelector("[data-target='#networkSubmenu']");
+        const networkSubMenu = document.querySelector("#networkSubmenu");
+
+        sidebarLinks.forEach(function (link) {
+            link.addEventListener("click", function (event) {
+                event.preventDefault();
+                const pageToLoad = this.getAttribute("data-page");
+                loadPage(pageToLoad);
+            });
+        });
+
+        networkLink.addEventListener("click", function (event) {
+            event.preventDefault();
+            if (networkSubMenu.classList.contains("show")) {
+                networkSubMenu.classList.remove("show");
+            } else {
+                networkSubMenu.classList.add("show");
+            }
+        });
+
+        function loadPage(pageName) {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", pageName, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    contentContainer.innerHTML = xhr.responseText;
+                }
+            };
+            xhr.send();
+        }
+    });
+</script>
+
+</body>
+</html>

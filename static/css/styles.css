@@ -1,0 +1,105 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #E6F7FF;  /* 浅蓝色背景 */
+    color: #004466;  /* 深蓝色文本 */
+    background: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url("/static/image/background.jpg");
+    background-size: cover;
+    background-position: center; /* 图片居中 */
+    background-repeat: no-repeat; /* 不重复背景图片 */
+    background-attachment: fixed; /* 背景图片固定，不随页面滚动 */
+}
+
+header {
+    background-color: #AEDFF7;  /* 淡蓝色header */
+    padding: 1rem 0;
+    text-align: center;
+}
+
+header h1 {
+    color: #005B99;  /* 深蓝色标题 */
+    margin: 0;
+}
+
+.centered-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.content {
+    width: 60%;
+}
+
+h1 {
+    font-family: 'Lobster', cursive;
+}
+
+/*nav {*/
+/*    opacity: 0; !* 初始透明度为0，即不可见 *!*/
+/*    transition: opacity 0.3s ease-in-out; !* 设置渐变效果 *!*/
+/*}*/
+
+/*nav:hover {*/
+/*    opacity: 1; !* 鼠标悬停在页面上时的透明度为1，即完全可见 *!*/
+/*}*/
+
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    padding-left: 0;
+    list-style-type: none;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #007BB5;  /* 蓝色链接 */
+    padding: 5px 10px;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #99D2F0;  /* 淡蓝色hover效果 */
+    color: #004466;  /* 深蓝色文本 */
+}
+
+.main-content {
+    max-width: 1000px;
+    margin: 3rem auto;
+    padding: 1rem;
+    background-color: #CCE7FF;  /* 超淡蓝色背景 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+}
+
+button {
+    background-color: #0099E5;  /* 中蓝色按钮 */
+    color: #FFFFFF;  /* 白色文本 */
+    border: 1px solid #007BB5;  /* 深蓝色边框 */
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #006FA1;  /* 深蓝色hover效果 */
+    color: #FFFFFF;  /* 白色文本 */
+}
+
+footer {
+    margin-top: 3rem;
+    text-align: center;
+    color: #005B99;  /* 深蓝色文本 */
+}
+
+footer p {
+    margin: 10px 0;
+}
