@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <!-- 页面头部内容 -->
+</head>
+<body>
+    <h1>Papers</h1>
+
+    <h2>User Input:</h2>
+    <p>{{ user_input }}</p>
+
+    <h2>Search Results:</h2>
+    <div class="table-responsive">
+        <div class="table-responsive" id="search-results-container">
+                    <table class="table table-bordered table-striped" id="search-results-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 60%;" class="clickable" onclick="sortTable(0)" title="Click to sort">Title
+                                    <span class="sort-icon" id="title-sort-icon"></span>
+                                </th>
+                                <th style="width: 20%;" class="clickable" onclick="sortTable(1)" title="Click to sort">Year
+                                    <span class="sort-icon" id="year-sort-icon"></span>
+                                </th>
+                                <th style="width: 20%;" class="clickable" onclick="sortTable(2)" title="Click to sort">Source Title
+                                    <span class="sort-icon" id="source-sort-icon"></span>
+                                </th>
+                                <!-- 添加其他需要显示的表头 -->
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for index, literature in literature_results.iterrows() %}
+                                <tr>
+                                    <td>{{ literature['Title'] }}</td>
+                                    <td>{{ literature['Year'] }}</td>
+                                    <td>{{ literature['Source title'] }}</td>
+                                    <!-- 添加其他需要显示的列 -->
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+    </div>
+</body>
+</html>
