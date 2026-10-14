@@ -40,6 +40,12 @@ The page loads Bootstrap, jQuery and the ECharts runtime from CDNs, so the brows
 
 The dataset is **not** included in this repository. It is an export from [Scopus](https://www.scopus.com), and Elsevier's terms restrict redistributing Scopus content, so you need to obtain it yourself under your own (or your institution's) Scopus access.
 
+1. Sign in to Scopus through your institution (a personal named account is needed for bulk exports).
+2. Run a document search for your topic. The original dataset is data-science and machine-learning papers; see the query notes below.
+3. Export the results as **CSV** and include these fields: Authors, Author(s) ID, Title, Year, Source title, Cited by, Abstract, Author Keywords, Index Keywords, References, Affiliations, EID.
+4. Convert the export into the three files below. The app expects exactly these names and columns, and it does not read a raw Scopus export directly.
+5. Save the three files in `database/`. They are git-ignored, so they stay on your machine.
+
 The app reads three CSV files from `database/`, all UTF-8:
 
 **`literature_data.csv`**, one row per paper
