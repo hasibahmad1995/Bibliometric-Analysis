@@ -23,6 +23,7 @@ def citation_rank(top_n, literature_data, savePath):
             ha = 'right'  # Align the label to the right of the bar
         plt.text(label_position, bar.get_y() + bar.get_height() / 2, str(count), va='center', ha=ha)
     plt.savefig(savePath)
+    plt.close()
 
 
 def influence_factor_rank(top_n, literature_data, savePath):
@@ -39,6 +40,7 @@ def influence_factor_rank(top_n, literature_data, savePath):
     plt.title('Citation Counts for Papers')
     plt.gca().invert_yaxis()
     plt.savefig(savePath)
+    plt.close()
 
 
 def YearlyPublicationTrends(literature_data, savePath):
@@ -55,6 +57,7 @@ def YearlyPublicationTrends(literature_data, savePath):
     # Set x-axis ticks to show every year
     plt.xticks(yearly_publications['Year'], rotation=45)  # Adjust rotation for better readability
     plt.savefig(savePath)
+    plt.close()
 
 
 def SourceTitleAnalysis(literature_data, top_n, savePath):
@@ -62,10 +65,12 @@ def SourceTitleAnalysis(literature_data, top_n, savePath):
     top_source_titles = literature_data['Source title'].value_counts().head(top_n)
     # Create a bar chart
     plt.figure(figsize=(12, 6))
-    sns.barplot(x=top_source_titles.values, y=top_source_titles.index, palette='viridis')
+    sns.barplot(x=top_source_titles.values, y=top_source_titles.index, hue=top_source_titles.index,
+                palette='viridis', legend=False)
     plt.title('Top Source Titles by Publication Count')
     plt.xlabel('Publication Count')
     plt.ylabel('Source Title')
     plt.grid(axis='x')
     plt.tight_layout()
     plt.savefig(savePath)
+    plt.close()

@@ -1,8 +1,26 @@
+import os
+
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import networkx as nx
 import pandas as pd
 from tqdm import tqdm
+
+# Natural Earth 110m countries (public domain); geopandas >= 1.0 no longer bundles it.
+WORLD_SHAPEFILE = os.path.abspath(os.path.join(
+    os.path.dirname(__file__), '..', '..', 'database', 'naturalearth_lowres', 'naturalearth_lowres.shp'))
+
+# Names in author_data.csv that differ from the Natural Earth spelling.
+COUNTRY_ALIASES = {
+    'United States': 'United States of America',
+    'Russian Federation': 'Russia',
+    'Viet Nam': 'Vietnam',
+    'Czech Republic': 'Czechia',
+    'North Macedonia': 'Macedonia',
+    'Bosnia and Herzegovina': 'Bosnia and Herz.',
+    "Cote d'Ivoire": "Côte d'Ivoire",
+    'Brunei Darussalam': 'Brunei',
+}
 
 
 def AuthorAffiliations(author_data, top_n, savePath):
@@ -11,9 +29,8 @@ def AuthorAffiliations(author_data, top_n, savePath):
     # Count affiliation occurrences
     affiliation_counts = affiliations_list.value_counts()
 
-    # Transpose the DataFrame
-    top_affiliations = affiliation_counts.head(top_n).reset_index().rename(
-        columns={'index': 'Affiliation', 'Affiliations': 'Number of Authors'})
+    top_affiliations = affiliation_counts.head(top_n).rename_axis('Affiliation').reset_index(
+        name='Number of Authors')
 
     # Create a bar chart
     plt.figure(figsize=(10, 6))
@@ -23,7 +40,7 @@ def AuthorAffiliations(author_data, top_n, savePath):
     plt.ylabel('Affiliation')
     plt.tight_layout()
     plt.savefig(savePath)
-    print('Author Affiliations saved in ', savePath)
+    plt.close()
 
 
 def AuthorCollaborationNetwork(author_data, savePath):
@@ -57,11 +74,7 @@ def AuthorProductivity(author_data, author_publication_data, top_n, savePath):
     author_productivity = author_productivity.sort_values(by='Publication Count', ascending=False)
     # print(author_productivity)
 
-    # Transpose the DataFrame
     top_affiliations = author_productivity.head(top_n)
-    # print(top_affiliations)
-    # Create a bar chart
-    plt.figure(figsize=(10, 6))
 
     merged_data = top_affiliations.merge(author_data, on='Author(s) ID', how='left')
 
@@ -73,21 +86,18 @@ def AuthorProductivity(author_data, author_publication_data, top_n, savePath):
     plt.xticks(rotation=45, ha='right')
     plt.tight_layout()
     plt.savefig(savePath)
-    # print('Author Productivity saved in ', savePath)
+    plt.close()
 
 
 def WorldHeatMapAuthor(author_data, savePath):
     # Count the number of authors from each country
-    country_counts = author_data['country'].value_counts().reset_index()
+    country_counts = author_data['country'].replace(COUNTRY_ALIASES).value_counts().reset_index()
     country_counts.columns = ['country', 'Author Count']
-    # print(country_counts)
 
-    # Load the world shapefile (replace with the actual file path)
-    world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+    world = gpd.read_file(WORLD_SHAPEFILE)
 
-    data = country_counts
-    # Merge the world shapefile with the data using ISO country codes
-    world_data = world.merge(pd.DataFrame(data), left_on='name', right_on='country')
+    # Merge the world shapefile with the author counts by country name
+    world_data = world.merge(country_counts, left_on='name', right_on='country')
 
     # Create a figure and axis
     fig, ax = plt.subplots(1, 1, figsize=(15, 10))
@@ -96,14 +106,14 @@ def WorldHeatMapAuthor(author_data, savePath):
     world.boundary.plot(ax=ax, linewidth=1)
 
     # Create a heatmap layer
-    world_data.plot(column='Author Count', cmap='YlOrRd', linewidth=0.8, ax=ax, edgecolor='0.8', legend=True)
+    if not world_data.empty:  # none of the authors' countries may be on the 110m map
+        world_data.plot(column='Author Count', cmap='YlOrRd', linewidth=0.8, ax=ax, edgecolor='0.8', legend=True)
 
     # # Add labels with author counts for x, y, label in zip(world_data.geometry.centroid.x,
     # world_data.geometry.centroid.y, world_data['Author Count']): ax.text(x, y, f'{label}', fontsize=10,
     # ha='center', va='center')
 
-    # Set axis title
     ax.set_title('Authors\' Country Heatmap')
 
-    # Show the plot
     plt.savefig(savePath)
+    plt.close(fig)
