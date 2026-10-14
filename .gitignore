@@ -1,0 +1,19 @@
+# Local virtual environment
+.venv/
+
+# Python / IDE
+__pycache__/
+*.pyc
+.idea/
+
+# Scopus data: obtained by the user, not redistributed (see README)
+database/*.csv
+database/*.rar
+database/*.zip
+database/keyword/
+database/paper/
+
+# Generated at runtime
+static/image/vision/
+static/keyword_network.html
+static/paper_network.html
