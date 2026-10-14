@@ -83,8 +83,10 @@ The app reads three CSV files from `database/`, all UTF-8:
 
 The script that produced these three files from a raw Scopus export is not in this repository, and these points were not recorded:
 
-- **Search query and date range.** TODO(author): add the exact Scopus query, the date it was run, and the document types.
-- **`Influence Factor`.** TODO(author): state how it was computed and from which source.
+- **Search query and date range.** The exact query was not saved. The data covers data science and machine learning (the most common author keywords are "machine learning", "data science", "artificial intelligence" and "deep learning"), with publication years 1974 to 2024. 2024 is only partly covered (12 papers).
+- **`Influence Factor`.** The formula was not saved. In the data it is a numeric value per paper (median 1, maximum about 899) that tracks `Cited by` closely (correlation about 0.78) and is not constant within a journal, so it appears to be derived from citations.
+
+If you rebuild the dataset, record the query, the date and the method here.
 - **`country`.** It looks like the last comma-separated part of the affiliation string. As a result it is noisy: it contains some company names and city names, and a few small territories (Singapore, Hong Kong, Malta, Bahrain, Macao) are not on the bundled 110m map. Rows whose country is not on the map are simply left off the heat map.
 
 ## Project layout
