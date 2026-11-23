@@ -31,7 +31,7 @@ top_n_keyword = 300
 top_n_paper = 10
 
 NO_SEARCH_HTML = '<h3>Run a search first</h3><p>Enter a keyword on the home page, then open this tab.</p>'
-NO_MATCH_HTML = '<h3>No papers matched</h3><p>Matching is case-sensitive and looks only at paper titles.</p>'
+NO_MATCH_HTML = '<h3>No papers matched</h3><p>Matching looks only at paper titles.</p>'
 
 
 def delete_files_in_folder(folder_path):
@@ -66,7 +66,7 @@ def search_literature(text):
     """Papers whose title contains text, plus their author links and author records."""
     global filtered_literature, author_results, publication_results
 
-    matches = literature_data['Title'].str.contains(text, regex=False, na=False)
+    matches = literature_data['Title'].str.contains(text, case=False, regex=False, na=False)
     filtered_literature = literature_data[matches]
 
     publication_ids = filtered_literature['EID'].unique()

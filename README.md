@@ -4,7 +4,7 @@ A small Flask app for exploring a bibliometric dataset of data-science papers. S
 
 ## What it does
 
-1. **Search.** Finds every paper whose `Title` contains the text you typed. Matching is a literal, case-sensitive substring test on titles only.
+1. **Search.** Finds every paper whose `Title` contains the text you typed. Matching is a literal, case-insensitive substring test on titles only.
 2. **Papers.** Lists the matches in a sortable table (title, year, source).
 3. **Visualize.** Draws six charts for the matched papers and their authors:
    top author affiliations, most productive authors, a world map of author countries,
@@ -107,6 +107,6 @@ database/                      your data files (git-ignored) + world map
 
 ## Known limits
 
-- Search is case-sensitive and title-only; there is no ranking.
+- Search is title-only substring matching; there is no ranking.
 - Single-user: results are stored in global variables.
 - Titles and keywords are not normalized, so "machine learning" and "machine-learning" count as different keywords.

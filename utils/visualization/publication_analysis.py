@@ -11,9 +11,9 @@ def influence_factor_rank(top_n, literature_data, savePath):
     plt.figure(figsize=(10, 6))
     bars = plt.barh(top_ten_influence['Title'], top_ten_influence['Influence Factor'],
                     color=[gradient(i / len(top_ten_influence)) for i in range(len(top_ten_influence))])
-    plt.xlabel('Citation Count')
+    plt.xlabel('Influence Factor')
     plt.ylabel('Paper Title')
-    plt.title('Citation Counts for Papers')
+    plt.title('Top {} Papers by Influence Factor'.format(top_n))
     plt.gca().invert_yaxis()
     plt.savefig(savePath)
     plt.close()
