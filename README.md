@@ -89,10 +89,20 @@ The script that produced these three files from a raw Scopus export is not in th
 If you rebuild the dataset, record the query, the date and the method here.
 - **`country`.** It looks like the last comma-separated part of the affiliation string. As a result it is noisy: it contains some company names and city names, and a few small territories (Singapore, Hong Kong, Malta, Bahrain, Macao) are not on the bundled 110m map. Rows whose country is not on the map are simply left off the heat map.
 
+## Running tests
+
+The tests use small made-up inputs, so they do not need the Scopus data.
+
+```bash
+pip install -r requirements-dev.txt
+pytest
+```
+
 ## Project layout
 
 ```
 app.py                         Flask routes and in-memory search
+tests/                         pytest tests for the counting and network code
 utils/
   exploratory_data_analysis.py runs the six charts
   social_network.py            keyword / reference co-occurrence counting

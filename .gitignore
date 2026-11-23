@@ -17,3 +17,6 @@ database/paper/
 static/image/vision/
 static/keyword_network.html
 static/paper_network.html
+
+# Test runner cache
+.pytest_cache/
