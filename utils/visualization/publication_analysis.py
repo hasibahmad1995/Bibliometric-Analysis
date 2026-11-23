@@ -2,30 +2,6 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 from matplotlib.colors import LinearSegmentedColormap
 
-def citation_rank(top_n, literature_data, savePath):
-    top_twenty_cited = literature_data.sort_values(by='Cited by', ascending=False).head(top_n)
-    colors = [(0.0, 0.5, 1.0), (1.0, 0.0, 0.0)]
-    gradient = LinearSegmentedColormap.from_list('CustomGradient', colors, N=len(top_twenty_cited))
-
-    plt.figure(figsize=(10, 6))
-    bars = plt.barh(top_twenty_cited['Title'], top_twenty_cited['Cited by'],
-                    color=[gradient(i / len(top_twenty_cited)) for i in range(len(top_twenty_cited))])
-    plt.xlabel('Citation Count')
-    plt.ylabel('Paper Title')
-    plt.title('Citation Counts for Papers')
-    plt.gca().invert_yaxis()
-    for bar, count, title in zip(bars, top_twenty_cited['Cited by'], top_twenty_cited['Title']):
-        label_position = bar.get_width() + 1  # Adjust this value as needed
-        if label_position < 10:  # Check if the label is too close to the edge
-            ha = 'left'  # Align the label to the left of the bar
-            label_position = 10  # Move the label inside the plot
-        else:
-            ha = 'right'  # Align the label to the right of the bar
-        plt.text(label_position, bar.get_y() + bar.get_height() / 2, str(count), va='center', ha=ha)
-    plt.savefig(savePath)
-    plt.close()
-
-
 def influence_factor_rank(top_n, literature_data, savePath):
     top_ten_influence = literature_data.sort_values(by='Influence Factor', ascending=False).head(top_n)
 

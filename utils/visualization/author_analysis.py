@@ -2,9 +2,6 @@ import os
 
 import geopandas as gpd
 import matplotlib.pyplot as plt
-import networkx as nx
-import pandas as pd
-from tqdm import tqdm
 
 # Natural Earth 110m countries (public domain); geopandas >= 1.0 no longer bundles it.
 WORLD_SHAPEFILE = os.path.abspath(os.path.join(
@@ -41,29 +38,6 @@ def AuthorAffiliations(author_data, top_n, savePath):
     plt.tight_layout()
     plt.savefig(savePath)
     plt.close()
-
-
-def AuthorCollaborationNetwork(author_data, savePath):
-    G = nx.Graph()
-
-    # Iterate through the DataFrame and add nodes and edges
-    for index, row in tqdm(author_data.iterrows(), total=len(author_data), desc="Building Collaboration Network"):
-        user_id = row['Author(s) ID']
-        affiliations = row['Affiliations']
-        if pd.notna(affiliations):  # Check for missing values
-            affiliations = affiliations.split(',')  # Split affiliations if not missing
-
-            for affiliation in affiliations:
-                G.add_node(user_id)  # Add author as a node
-                G.add_edge(user_id, affiliation)  # Add edge between author and affiliation
-
-    # Visualize the author collaboration network
-    pos = nx.spring_layout(G, seed=42)  # Layout algorithm for the graph
-    plt.figure(figsize=(10, 8))
-    nx.draw_networkx(G, pos, with_labels=False, node_size=10, node_color='skyblue', edge_color='gray', alpha=0.7)
-    plt.title('Author Collaboration Network Visualization')
-    plt.savefig(savePath)
-    # print('Author Collaboration Network saved in ', savePath)
 
 
 def AuthorProductivity(author_data, author_publication_data, top_n, savePath):

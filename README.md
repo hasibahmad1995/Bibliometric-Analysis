@@ -110,4 +110,3 @@ database/                      your data files (git-ignored) + world map
 - Search is case-sensitive and title-only; there is no ranking.
 - Single-user: results are stored in global variables.
 - Titles and keywords are not normalized, so "machine learning" and "machine-learning" count as different keywords.
-- `utils/visualization/network_visu_paper.py` and `utils/visualization/keyword_network1.html` are older standalone experiments that the app does not use.

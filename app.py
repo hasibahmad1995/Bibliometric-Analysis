@@ -5,13 +5,10 @@ matplotlib.use('Agg')  # charts are drawn on Flask worker threads, so no GUI bac
 
 import pandas as pd
 from flask import Flask, render_template, request
-from icecream import ic
 
 from utils.exploratory_data_analysis import eda
 from utils.social_network import build_network_data
 from utils.visualization.network_visu import network_visu
-
-ic.disable()  # printing whole DataFrames is slow and noisy; call ic.enable() to debug
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, 'database')
