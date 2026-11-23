@@ -1,5 +1,7 @@
 # DS Paper Universe
 
+[![tests](https://github.com/hasibahmad1995/Bibliometric-Analysis/actions/workflows/tests.yml/badge.svg)](https://github.com/hasibahmad1995/Bibliometric-Analysis/actions/workflows/tests.yml)
+
 A small Flask app for exploring a bibliometric dataset of data-science papers. Search for a term and the app lists the matching papers, charts who wrote them and where they are based, and draws keyword and reference co-occurrence networks.
 
 ## What it does
