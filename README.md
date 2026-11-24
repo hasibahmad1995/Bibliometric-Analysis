@@ -1,10 +1,12 @@
 # DS Paper Universe
 
+[![tests](https://github.com/hasibahmad1995/Bibliometric-Analysis/actions/workflows/tests.yml/badge.svg)](https://github.com/hasibahmad1995/Bibliometric-Analysis/actions/workflows/tests.yml)
+
 A small Flask app for exploring a bibliometric dataset of data-science papers. Search for a term and the app lists the matching papers, charts who wrote them and where they are based, and draws keyword and reference co-occurrence networks.
 
 ## What it does
 
-1. **Search.** Finds every paper whose `Title` contains the text you typed. Matching is a literal, case-sensitive substring test on titles only.
+1. **Search.** Finds every paper whose `Title` contains the text you typed. Matching is a literal, case-insensitive substring test on titles only.
 2. **Papers.** Lists the matches in a sortable table (title, year, source).
 3. **Visualize.** Draws six charts for the matched papers and their authors:
    top author affiliations, most productive authors, a world map of author countries,
@@ -89,10 +91,20 @@ The script that produced these three files from a raw Scopus export is not in th
 If you rebuild the dataset, record the query, the date and the method here.
 - **`country`.** It looks like the last comma-separated part of the affiliation string. As a result it is noisy: it contains some company names and city names, and a few small territories (Singapore, Hong Kong, Malta, Bahrain, Macao) are not on the bundled 110m map. Rows whose country is not on the map are simply left off the heat map.
 
+## Running tests
+
+The tests use small made-up inputs, so they do not need the Scopus data.
+
+```bash
+pip install -r requirements-dev.txt
+pytest
+```
+
 ## Project layout
 
 ```
 app.py                         Flask routes and in-memory search
+tests/                         pytest tests for the counting and network code
 utils/
   exploratory_data_analysis.py runs the six charts
   social_network.py            keyword / reference co-occurrence counting
@@ -107,7 +119,6 @@ database/                      your data files (git-ignored) + world map
 
 ## Known limits
 
-- Search is case-sensitive and title-only; there is no ranking.
+- Search is title-only substring matching; there is no ranking.
 - Single-user: results are stored in global variables.
 - Titles and keywords are not normalized, so "machine learning" and "machine-learning" count as different keywords.
-- `utils/visualization/network_visu_paper.py` and `utils/visualization/keyword_network1.html` are older standalone experiments that the app does not use.

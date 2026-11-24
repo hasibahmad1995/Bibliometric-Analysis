@@ -5,13 +5,10 @@ matplotlib.use('Agg')  # charts are drawn on Flask worker threads, so no GUI bac
 
 import pandas as pd
 from flask import Flask, render_template, request
-from icecream import ic
 
 from utils.exploratory_data_analysis import eda
 from utils.social_network import build_network_data
 from utils.visualization.network_visu import network_visu
-
-ic.disable()  # printing whole DataFrames is slow and noisy; call ic.enable() to debug
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, 'database')
@@ -34,7 +31,7 @@ top_n_keyword = 300
 top_n_paper = 10
 
 NO_SEARCH_HTML = '<h3>Run a search first</h3><p>Enter a keyword on the home page, then open this tab.</p>'
-NO_MATCH_HTML = '<h3>No papers matched</h3><p>Matching is case-sensitive and looks only at paper titles.</p>'
+NO_MATCH_HTML = '<h3>No papers matched</h3><p>Matching looks only at paper titles.</p>'
 
 
 def delete_files_in_folder(folder_path):
@@ -69,7 +66,7 @@ def search_literature(text):
     """Papers whose title contains text, plus their author links and author records."""
     global filtered_literature, author_results, publication_results
 
-    matches = literature_data['Title'].str.contains(text, regex=False, na=False)
+    matches = literature_data['Title'].str.contains(text, case=False, regex=False, na=False)
     filtered_literature = literature_data[matches]
 
     publication_ids = filtered_literature['EID'].unique()
